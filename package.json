@@ -1,9 +1,14 @@
 {
   "name": "svg-to-geojson",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Upload SVG, return GeoJSON.",
   "main": "src/index.js",
-  "homepage": "https://labs.mapbox.com/svg-to-geojson",
+  "author": "kobakakzu0429 <kobakazu10@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kobakazu0429/svg-to-geojson/issues"
+  },
+  "homepage": "https://github.com/kobakazu0429/svg-to-geojson#README",
   "dependencies": {
     "@mapbox/mapbox-gl-draw": "^1.0.6",
     "@mapbox/mbx-assembly": "^0.28.1",
@@ -12,7 +17,7 @@
     "filesaver.js": "^0.2.0",
     "lodash": "^4.17.5",
     "mapbox-gl": "^0.44.1",
-    "pathologist": "^0.1.9",
+    "pathologist": "git+ssh://git@github.com/kobakazu0429/pathologist.git",
     "react": "^16.6.0",
     "react-dnd": "^2.5.4",
     "react-dnd-html5-backend": "^2.5.4",
@@ -27,8 +32,6 @@
     "build": "underreact build",
     "serve-static": "underreact serve-static"
   },
-  "author": "Mapbox",
-  "license": "ISC",
   "devDependencies": {
     "@mapbox/underreact": "^0.3.0"
   }

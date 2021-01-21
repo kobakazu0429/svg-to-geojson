@@ -1,4 +1,4 @@
-.sliderHolder{
+.sliderHolder {
   position: absolute;
   top: 205px;
   right: 23px;
@@ -10,7 +10,7 @@
   background: #5b5a5a;
   border-radius: 5px;
 }
-.handle{
+.handle {
   position: absolute;
   z-index: 1;
   height: 15px;
@@ -20,18 +20,19 @@
   border: 1.5px solid #5b5a5a;
   border-radius: 50%;
 }
-.handle:hover{
+.handle:hover {
   cursor: pointer;
 }
-.handle:active{
+.handle:active {
   cursor: grab;
 }
-.pointHolder{
+.pointHolder {
   z-index: 1;
   position: absolute;
+  right: 0;
   text-align: center;
   font-size: 13px;
-  background-color: rgba(255,255,255,.8);
+  background-color: rgba(255, 255, 255, 0.8);
   border-radius: 3px;
   margin: 7px 0 0 -20px;
   line-height: 1.2;

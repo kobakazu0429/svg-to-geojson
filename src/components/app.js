@@ -18,8 +18,8 @@ const svgo = new SVGO();
 mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA';
 
 const SCALE = 1;
-let NUM_POINTS = 250,
-    currentFile;
+let NUM_POINTS = 250;
+let currentFile;
 
 let App = class App extends React.PureComponent {
   mouseCoordinates = {
@@ -39,8 +39,8 @@ let App = class App extends React.PureComponent {
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
       style: 'mapbox://styles/mapbox/light-v9',
-      center: [5, 34],
-      zoom: 1.5
+      center: [0, 0],
+      zoom: 1
     });
 
     this.draw = new MapboxDraw();
@@ -69,7 +69,7 @@ let App = class App extends React.PureComponent {
   sendValue = val => {
     this.draw.deleteAll();
     NUM_POINTS = val;
-    if(currentFile){
+    if (currentFile) {
       const reader = new FileReader();
       reader.addEventListener('load', d => {
         svgo.postMessage({
@@ -92,7 +92,7 @@ let App = class App extends React.PureComponent {
   };
 
   buildFeature = data => {
-    const {path, coords} = data;
+    const { path, coords } = data;
 
     let feature = {
       type: 'Feature',
@@ -110,29 +110,29 @@ let App = class App extends React.PureComponent {
 
     // If the first and last coords match it should be drawn as a polygon
     if (coords[0][0] === coords[coords.length - 1][0] &&
-        coords[0][1] === coords[coords.length - 1][1]) {
-          feature.geometry = {
-            type: 'Polygon',
-            coordinates: [
-              coords.map(d => {
-                const c = this.map.unproject(d);
-                return [c.lng, c.lat];
-              })
-            ]
-          };
+      coords[0][1] === coords[coords.length - 1][1]) {
+      feature.geometry = {
+        type: 'Polygon',
+        coordinates: [
+          coords.map(d => {
+            const c = this.map.unproject(d);
+            return [c.lng, c.lat];
+          })
+        ]
+      };
     } else {
       const getSum = (total, num) => {
-          return total + num;
+        return total + num;
       }
       try {
         // try to see if it should be a multipolygon
         let distances = [];
         let splits = [];
         coords.forEach((c, idx) => {
-          if(idx > 0){
+          if (idx > 0) {
             const from = turf.point([this.map.unproject(coords[idx - 1])['lng'], this.map.unproject(coords[idx - 1])['lat']]);
             const to = turf.point([this.map.unproject(c)['lng'], this.map.unproject(c)['lat']]);
-            const options = {units: 'miles'};
+            const options = { units: 'miles' };
 
             const distance = turf.distance(from, to, options);
             // get distances between points
@@ -140,15 +140,15 @@ let App = class App extends React.PureComponent {
           }
         });
 
-        const distAvg = distances.reduce(getSum)/distances.length;
+        const distAvg = distances.reduce(getSum) / distances.length;
         coords.forEach((c, idx) => {
-          if(idx > 0){
+          if (idx > 0) {
             const from = turf.point([this.map.unproject(coords[idx - 1])['lng'], this.map.unproject(coords[idx - 1])['lat']]);
             const to = turf.point([this.map.unproject(c)['lng'], this.map.unproject(c)['lat']]);
-            const options = {units: 'miles'};
+            const options = { units: 'miles' };
             const distance = turf.distance(from, to, options);
             // if the following coordinate is ~2.5 farther away than average, it is most likely a new polygon
-            if(distance > distAvg*2.5){
+            if (distance > distAvg * 2.5) {
               splits.push(idx);
             }
           }
@@ -160,12 +160,12 @@ let App = class App extends React.PureComponent {
         let newShapeArray = [];
         splits.forEach((s, idx) => {
           let shape = [];
-          if(idx === 0){
-            for(let i = 0; i < s; i++){
+          if (idx === 0) {
+            for (let i = 0; i < s; i++) {
               shape.push([this.map.unproject(coords[i])['lng'], this.map.unproject(coords[i])['lat']]);
             }
           } else {
-            for(let i = splits[idx-1]; i < s; i++){
+            for (let i = splits[idx - 1]; i < s; i++) {
               shape.push([this.map.unproject(coords[i])['lng'], this.map.unproject(coords[i])['lat']]);
             }
           }
@@ -181,7 +181,7 @@ let App = class App extends React.PureComponent {
           coordinates: newShapeArray
         };
       }
-      catch(err) {
+      catch (err) {
         feature.geometry = {
           type: 'LineString',
           coordinates: coords.map(d => {
@@ -300,7 +300,7 @@ let App = class App extends React.PureComponent {
       <div>
         <div className="sliderHolder">
           <ReactSlider orientation={'vertical'} invert={true} defaultValue={300} min={250} max={5000} onChange={this.updateHandle} onAfterChange={this.sendValue} />
-          <div className="pointHolder"><div className="number">250</div>points</div>
+          <div className="pointHolder"><div className="number">250</div>points<br />(change num point slider)</div>
         </div>
         <div onMouseMove={this.trackCoordinates}>
           <div className="flex-parent flex-parent--end-cross flex-parent--center-main absolute top right bottom left">
@@ -313,7 +313,7 @@ let App = class App extends React.PureComponent {
               </button>
             </div>
           </div>
-      </div>
+        </div>
 
         {isOver && <div className="bg-darken25 fixed left right top bottom events-none z5" />}
         <div ref={this.setMapContainer} className="absolute top right left bottom" />

@@ -1,4 +1,4 @@
-import { transform } from 'pathologist';
+import { transform } from 'pathologist/dist/index.modern';
 
 function pathologize(svg) {
   const expression = /<(text|style|metadata|pattern)[\s\S]*?<\/(text|style|metadata|pattern)>/g;
