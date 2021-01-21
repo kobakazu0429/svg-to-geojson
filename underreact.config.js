@@ -4,7 +4,7 @@ const html = require('./html');
 
 module.exports = () => {
   return {
-    siteBasePath: './',
+    siteBasePath: 'svg-to-geojson',
     publicAssetsPath: "",
     outputDirectory: path.join(__dirname, 'docs'),
     htmlSource: html,
