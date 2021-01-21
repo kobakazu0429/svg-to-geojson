@@ -1,15 +1,18 @@
-SVG to GeoJSON
----
+# SVG to GeoJSON
+
+Forked from [mapbox/svg-to-geojson](https://github.com/mapbox/svg-to-geojson/)
 
 Drag and drop SVG on the map and it returns GeoJSON back to you.
 
-### Run it
+## Run it
 
-    git clone https://github.com/mapbox/svg-to-geojson.git
+```shell
+git clone https://github.com/mapbox/svg-to-geojson.git
 
-    cd svg-to-geojson
-    npm install
-    npm start
+cd svg-to-geojson
+npm install
+npm start
+```
 
 Runs the app from http://localhost:8080/svg-to-geojson/
 
