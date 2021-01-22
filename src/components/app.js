@@ -18,7 +18,7 @@ const svgo = new SVGO();
 mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA';
 
 const SCALE = 1;
-let NUM_POINTS = 250;
+let NUM_POINTS = 5000;
 let currentFile;
 
 let App = class App extends React.PureComponent {

@@ -21,35 +21,49 @@ function xml2string(node) {
   }
 }
 
-function pathToCoords(path, scale, numPoints, translateX, translateY) {
+function simplyCoords(path, scale, translateX, translateY) {
+  console.log(path);
   const pathString = xml2string(path);
+  console.log(pathString);
+  const svg = parse(pathString);
+  console.log(svg);
+
+  if (svg.children.length === 0) return null;
+
   const { d } = parse(pathString).children[0].properties;
   const parsed = SVGPath.parse(d);
+
+  if (parsed.curveshapes.length === 0 && parsed.current.points.length === 0) return null;
+
   const points = parsed.curveshapes.length > 0
     ? parsed.curveshapes[0].points?.map(({ main }) => ({ x: main.x, y: main.y }))
     : parsed.current.points.map(({ main }) => ({ x: main.x, y: main.y }));
 
-  if (isAngularShape(points)) {
-    return {
-      path,
-      coords: points.map((point) => {
-        return [point.x * scale + translateX, point.y * scale + translateY];
-      })
-    }
-  } else {
-    const length = path.getTotalLength();
-    const getRange = [... new Array(numPoints).keys()];
-    // Always include the max value in the range.
-    // This is helpful for detecting closed polygons vs lines
-    getRange.push(numPoints);
+  if (!isAngularShape(points)) return null;
 
-    return {
-      path,
-      coords: getRange.map((i) => {
-        const point = path.getPointAtLength(length * i / numPoints);
-        return [point.x * scale + translateX, point.y * scale + translateY];
-      })
-    }
+  return points.map((p) => [p.x * scale + translateX, p.y * scale + translateY])
+}
+
+function pathToCoords(path, scale, numPoints, translateX, translateY) {
+  const result = simplyCoords(path, scale, translateX, translateY);
+
+  if (result !== null) return {
+    path,
+    coords: result
+  };
+
+  const length = path.getTotalLength();
+  const getRange = [... new Array(numPoints).keys()];
+  // Always include the max value in the range.
+  // This is helpful for detecting closed polygons vs lines
+  getRange.push(numPoints);
+
+  return {
+    path,
+    coords: getRange.map((i) => {
+      const point = path.getPointAtLength(length * i / numPoints);
+      return [point.x * scale + translateX, point.y * scale + translateY];
+    })
   }
 }
 
