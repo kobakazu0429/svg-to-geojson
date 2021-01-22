@@ -1,5 +1,3 @@
-import { range } from 'lodash';
-
 function pathToCoords(path, scale, numPoints, translateX, translateY) {
   const length = path.getTotalLength();
   const getRange = [... new Array(numPoints).keys()];
