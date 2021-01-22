@@ -1,6 +1,6 @@
 {
   "name": "svg-to-geojson",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Upload SVG, return GeoJSON.",
   "main": "src/index.js",
   "author": "kobakakzu0429 <kobakazu10@gmail.com>",
@@ -13,27 +13,44 @@
     "@mapbox/mapbox-gl-draw": "^1.0.6",
     "@mapbox/mbx-assembly": "^0.31.0",
     "@turf/turf": "^6.3.0",
-    "create-react-class": "^15.6.3",
-    "filesaver.js": "^1.3.4",
+    "file-saver": "^2.0.5",
     "js-svg-path": "^1.1.0",
     "mapbox-gl": "^0.44.1",
     "pathologist": "git+ssh://git@github.com/kobakazu0429/pathologist.git",
-    "react": "^16.6.0",
-    "react-dnd": "^2.5.4",
-    "react-dnd-html5-backend": "^2.5.4",
-    "react-dom": "^16.6.0",
-    "react-helmet": "^5.2.0",
-    "react-slider": "^0.11.2",
-    "svg-parser": "^2.0.4",
-    "webpack": "^4.27.1",
-    "worker-loader": "^2.0.0"
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-dropzone": "^11.2.4",
+    "svg-parser": "^2.0.4"
   },
   "scripts": {
-    "start": "underreact start",
-    "build": "underreact build",
-    "serve-static": "underreact serve-static"
+    "start": "parcel index.html",
+    "lint": "npm run lint:eslint && npm run lint:prettier",
+    "lint:eslint": "eslint \"{src,test}/**/*.{js,ts}\" --fix",
+    "lint:prettier": "prettier \"./{src,test}/**/*.{js,ts}\" --write"
   },
   "devDependencies": {
-    "@mapbox/underreact": "^0.6.0-dev.8"
+    "@kobakazu0429/eslint-config-typescript-react": "^2.0.1",
+    "@mapbox/underreact": "^0.6.0-dev.8",
+    "@types/file-saver": "^2.0.1",
+    "@types/mapbox-gl": "^2.0.3",
+    "@types/node": "^14.14.22",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/svg-parser": "^2.0.1",
+    "eslint": "^7.18.0",
+    "parcel-bundler": "^1.12.4",
+    "typescript": "^4.1.3"
+  },
+  "browserslist": {
+    "production": [
+      "last 3 chrome versions",
+      "last 3 firefox versions",
+      "last 3 safari versions"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
