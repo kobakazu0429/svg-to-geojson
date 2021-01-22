@@ -24,6 +24,7 @@
   },
   "scripts": {
     "start": "parcel index.html",
+    "build": "parcel build index.html -d docs",
     "lint": "npm run lint:eslint && npm run lint:prettier",
     "lint:eslint": "eslint \"{src,test}/**/*.{js,ts}\" --fix",
     "lint:prettier": "prettier \"./{src,test}/**/*.{js,ts}\" --write"
