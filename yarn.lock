@@ -6702,6 +6702,11 @@ isobject@^3.0.0, isobject@^3.0.1:
   resolved "https://registry.yarnpkg.com/isobject/-/isobject-3.0.1.tgz#4e431e92b11a9731636aa1f9c8d1ccbcfdab78df"
   integrity sha1-TkMekrEalzFjaqH5yNHMvP2reN8=
 
+js-svg-path@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/js-svg-path/-/js-svg-path-1.1.0.tgz#f29e7ad39fb48bd05248fa75cec17aeed85b8ca9"
+  integrity sha1-8p5605+0i9BSSPp1zsF67thbjKk=
+
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
@@ -8122,8 +8127,8 @@ path-type@^3.0.0:
     pify "^3.0.0"
 
 "pathologist@git+ssh://git@github.com/kobakazu0429/pathologist.git":
-  version "0.2.1"
-  resolved "git+ssh://git@github.com/kobakazu0429/pathologist.git#67df613762aa77b9f6b4996713949caf0b9033d1"
+  version "0.2.2"
+  resolved "git+ssh://git@github.com/kobakazu0429/pathologist.git#482601b0086d324a0b73480abbdc9a4475ae5dde"
   dependencies:
     svg-parser "^2.0.4"
     svgpath "^2.3.0"

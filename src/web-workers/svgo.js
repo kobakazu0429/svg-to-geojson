@@ -17,7 +17,7 @@ import cleanupAttrs from 'svgo/plugins/cleanupAttrs';
 import inlineStyles from 'svgo/plugins/inlineStyles';
 import minifyStyles from 'svgo/plugins/minifyStyles';
 import convertStyleToAttrs from 'svgo/plugins/convertStyleToAttrs';
-import cleanupIDs from 'svgo/plugins/cleanupIDs';
+// import cleanupIDs from 'svgo/plugins/cleanupIDs';
 import removeRasterImages from 'svgo/plugins/removeRasterImages';
 import removeUselessDefs from 'svgo/plugins/removeUselessDefs';
 import cleanupNumericValues from 'svgo/plugins/cleanupNumericValues';
@@ -30,7 +30,7 @@ import removeViewBox from 'svgo/plugins/removeViewBox';
 import cleanupEnableBackground from 'svgo/plugins/cleanupEnableBackground';
 import removeHiddenElems from 'svgo/plugins/removeHiddenElems';
 import removeEmptyText from 'svgo/plugins/removeEmptyText';
-import convertShapeToPath from 'svgo/plugins/convertShapeToPath';
+// import convertShapeToPath from 'svgo/plugins/convertShapeToPath';
 import moveElemsAttrsToGroup from 'svgo/plugins/moveElemsAttrsToGroup';
 import moveGroupAttrsToElems from 'svgo/plugins/moveGroupAttrsToElems';
 import collapseGroups from 'svgo/plugins/collapseGroups';
@@ -77,7 +77,7 @@ const pluginsData = {
   cleanupEnableBackground,
   removeHiddenElems,
   removeEmptyText,
-  convertShapeToPath,
+  // convertShapeToPath,
   moveElemsAttrsToGroup,
   moveGroupAttrsToElems,
   collapseGroups,
@@ -220,7 +220,7 @@ self.addEventListener('message', e => {
     const svg = cloneParsedSvg(parsedSvg);
 
     let cleanSvg;
-    plugins(svg, {input: 'string'}, optimisedPluginsData);
+    plugins(svg, { input: 'string' }, optimisedPluginsData);
 
     cleanSvg = js2svg(svg, { indent: '  ' }).data;
     self.postMessage(cleanSvg);
