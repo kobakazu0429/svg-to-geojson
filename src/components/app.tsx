@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import "mapbox-gl/dist/mapbox-gl.css";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 import "./app.css";
@@ -9,8 +10,8 @@ import mapboxgl from "mapbox-gl";
 import MapboxDraw from "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw";
 import { pathologize } from "../pathologize";
 import { Coord, pathToCoords } from "../path-to-coordinates";
+import { svgo } from "../svgo";
 
-const svgo = new Worker("../web-workers/svgo.js");
 mapboxgl.accessToken =
   "pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA";
 
@@ -58,9 +59,7 @@ export const App: React.VFC = () => {
       if (currentFile) {
         const reader = new FileReader();
         reader.addEventListener("load", (d) => {
-          svgo.postMessage({
-            svg: d.target?.result,
-          });
+          pathologizing(d.target?.result as string);
         });
 
         reader.readAsText(currentFile);
@@ -155,8 +154,8 @@ export const App: React.VFC = () => {
     } else {
       try {
         // try to see if it should be a multipolygon
-        let distances: number[] = [];
-        let splits: number[] = [];
+        const distances: number[] = [];
+        const splits: number[] = [];
         coords.forEach((c, idx) => {
           if (idx > 0) {
             const from = turf.point([
@@ -197,9 +196,9 @@ export const App: React.VFC = () => {
         // idx only gets to last split - needs to get to the end of the shape
         splits.push(segmentCount.current);
 
-        let newShapeArray: any[] = [];
+        const newShapeArray: any[] = [];
         splits.forEach((s, idx) => {
-          let shape: [number, number][] = [];
+          const shape: [number, number][] = [];
           if (idx === 0) {
             for (let i = 0; i < s; i++) {
               shape.push([
@@ -240,43 +239,41 @@ export const App: React.VFC = () => {
     return feature;
   };
 
-  const svgToGeoJSON = useCallback(
-    (svgString: string) => {
-      if (!draw.current) return;
-      // Create an empty container to fetch paths using the dom
-      const empty = document.createElement("div");
-      empty.innerHTML = svgString;
+  const svgToGeoJSON = (svgString: string) => {
+    if (!draw.current) return;
+    // Create an empty container to fetch paths using the dom
+    const empty = document.createElement("div");
+    empty.innerHTML = svgString;
 
-      const coordinates = calculateCoords(empty.querySelector("svg"));
-      const paths = empty.querySelectorAll("path");
+    const coordinates = calculateCoords(empty.querySelector("svg"));
+    const paths = empty.querySelectorAll("path");
 
-      if (!paths.length) {
-        setHelpText("No paths were found in this SVG");
-        return;
-      }
+    if (!paths.length) {
+      setHelpText("No paths were found in this SVG");
+      return;
+    }
 
-      const pathsCoord = Array.from(paths)
-        .map((path) =>
-          pathToCoords(
-            path,
-            segmentCount.current,
-            SCALE,
-            coordinates.x,
-            coordinates.y
-          )
+    const pathsCoord = Array.from(paths)
+      .map((path) =>
+        pathToCoords(
+          path,
+          segmentCount.current,
+          SCALE,
+          coordinates.x,
+          coordinates.y
         )
-        .map(buildFeature);
+      )
+      .map(buildFeature);
 
-      pathsCoord.forEach((coord) => {
-        draw.current.add(coord);
-      });
+    pathsCoord.forEach((coord) => {
+      draw.current.add(coord);
+    });
 
-      setHelpText("Drag and drop an SVG on the map.");
-    },
-    [segmentCount, draw]
-  );
+    setHelpText("Drag and drop an SVG on the map.");
+    empty.remove();
+  };
 
-  const onDrop = useCallback((files: File[]) => {
+  const onDrop = (files: File[]) => {
     const file = files[0];
     currentFile = file;
     const { type } = file;
@@ -290,25 +287,24 @@ export const App: React.VFC = () => {
 
     const reader = new FileReader();
     reader.addEventListener("load", (d) => {
-      svgo.postMessage({
-        svg: d.target?.result,
-      });
-
-      svgo.addEventListener("message", (e) => {
-        pathologize(e.data)
-          .then(svgToGeoJSON)
-          .catch((err: any) => {
-            console.error(err);
-            setHelpText("Error parsing SVG");
-            return;
-          });
-      });
+      pathologizing(d.target?.result as string);
     });
-
     reader.readAsText(file);
-  }, []);
+  };
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const pathologizing = (svg: string) => {
+    svgo(svg).then((p) => {
+      pathologize(p)
+        .then(svgToGeoJSON)
+        .catch((err: any) => {
+          console.error(err);
+          setHelpText("Error parsing SVG");
+          return;
+        });
+    });
+  };
+
+  const { getRootProps, isDragActive } = useDropzone({
     onDrop,
     noClick: true,
   });
