@@ -14,7 +14,7 @@ function isAngularShape(points: { x: number; y: number }[]): boolean {
 
 function xml2string(node: Node): string {
   if (typeof XMLSerializer !== "undefined") {
-    var serializer = new XMLSerializer();
+    const serializer = new XMLSerializer();
     return serializer.serializeToString(node);
   } else {
     throw Error("unknown node");
