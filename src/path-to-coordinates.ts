@@ -39,6 +39,11 @@ function simplyCoords(
   if (!node.properties?.d) return null;
 
   const { d } = node.properties;
+
+  // js-svg-path is not supported `s`
+  // https://github.com/Pomax/js-svg-path/issues/1
+  if (d.includes("s")) return null;
+
   const parsed = SVGPath.parse(d);
 
   if (parsed.curveshapes.length === 0 && parsed.current.points.length === 0)
