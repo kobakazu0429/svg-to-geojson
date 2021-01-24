@@ -16,7 +16,7 @@ mapboxgl.accessToken =
   "pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA";
 
 let currentFile: File;
-
+const drawData: { layerName: string; featureIds: string[] }[] = [];
 const SCALE = 1;
 
 export const App: React.VFC = () => {
@@ -69,10 +69,25 @@ export const App: React.VFC = () => {
   );
 
   const download = useCallback(() => {
-    const blob = new Blob([JSON.stringify(draw.current.getAll(), null, 2)], {
-      type: "text/plain;charset=utf-8",
+    drawData.forEach((data) => {
+      const features = data.featureIds.map((id) => draw.current.get(id));
+      const blob = new Blob(
+        [
+          JSON.stringify(
+            {
+              type: "FeatureCollection",
+              features: features,
+            },
+            null,
+            2
+          ),
+        ],
+        {
+          type: "text/plain;charset=utf-8",
+        }
+      );
+      saveAs(blob, `${data.layerName}.geojson`);
     });
-    saveAs(blob, "features.geojson");
   }, [draw]);
 
   const trackCoordinates = useCallback(
@@ -263,8 +278,16 @@ export const App: React.VFC = () => {
       )
       .map(buildFeature);
 
+    const ids: string[][] = [];
+
     pathsCoord.forEach((coord) => {
-      draw.current.add(coord);
+      const id = draw.current.add(coord);
+      ids.push(id);
+    });
+
+    drawData.push({
+      layerName: currentFile.name.split(".svg")[0],
+      featureIds: ids.flat(),
     });
 
     setHelpText("Drag and drop an SVG on the map.");
