@@ -130,6 +130,9 @@ export const App: React.VFC = () => {
       type: "Feature";
       properties: {
         id?: string;
+        // https://docs.geolonia.com/geojson/
+        title?: string;
+        stroke?: string | null;
         fill?: string | null;
       };
       geometry: {
@@ -144,6 +147,11 @@ export const App: React.VFC = () => {
 
     if (path.id) {
       feature.properties.id = path.id;
+      feature.properties.title = path.id;
+    }
+
+    if (path.getAttribute("stroke")) {
+      feature.properties.stroke = path.getAttribute("stroke");
     }
 
     if (path.getAttribute("fill")) {
