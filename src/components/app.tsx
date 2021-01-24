@@ -49,24 +49,9 @@ export const App: React.VFC = () => {
     }
   }, [mapContainer, draw]);
 
-  const updateHandle = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (!draw.current) return;
-      segmentCount.current = e.target.valueAsNumber;
-
-      draw.current.deleteAll();
-
-      if (currentFile) {
-        const reader = new FileReader();
-        reader.addEventListener("load", (d) => {
-          pathologizing(d.target?.result as string);
-        });
-
-        reader.readAsText(currentFile);
-      }
-    },
-    [draw]
-  );
+  const updateHandle = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    segmentCount.current = e.target.valueAsNumber;
+  }, []);
 
   const download = useCallback(() => {
     drawData.forEach((data) => {
