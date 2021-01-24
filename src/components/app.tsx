@@ -93,13 +93,11 @@ export const App: React.VFC = () => {
       // to return reasonable x/y coordinates on the map.
       let { width, height } = svg.getBBox();
 
-      if (width === 0 && svg.getAttribute("width")) {
-        width = parseInt(svg.getAttribute("width"), 10);
-      }
+      const svgWidth = svg.getAttribute("width");
+      const svgHeight = svg.getAttribute("height");
 
-      if (height === 0 && svg.getAttribute("height")) {
-        height = parseInt(svg.getAttribute("height"), 10);
-      }
+      if (width === 0 && svgWidth) width = parseInt(svgWidth, 10);
+      if (height === 0 && svgHeight) height = parseInt(svgHeight, 10);
 
       return {
         x: x - width / 2,
